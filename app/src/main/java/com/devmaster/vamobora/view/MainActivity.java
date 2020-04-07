@@ -10,9 +10,13 @@ import android.widget.TextView;
 
 import com.devmaster.vamobora.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewHolder mViewHolder = new ViewHolder();
+    private static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //evento de click
         this.mViewHolder.buttonConfirm.setOnClickListener(this);
+
+        //Data atual
+        this.mViewHolder.textToday.setText(SIMPLE_DATE_FORMAT.format(Calendar.getInstance().getTime()));
+
+        String daysLeft = String.format("%s %s", String.valueOf(this.getDaysLeft()), getString(R.string.dias));
+        this.mViewHolder.textToday.setText(daysLeft);
+
     }
 
     @Override
@@ -33,6 +44,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, DetailsActivity.class);
             startActivity(intent);
         }
+    }
+
+    private int getDaysLeft() {
+        //data de hoje
+        Calendar calerdarToday = Calendar.getInstance();
+        int today = calerdarToday.get(Calendar.DAY_OF_YEAR);
+
+        //dias maximo do ano
+        Calendar calendarLastDay = Calendar.getInstance();
+        int dayMax = calendarLastDay.getActualMaximum(Calendar.DAY_OF_YEAR);
+
+        return dayMax - today;
     }
 
     private static class ViewHolder {
